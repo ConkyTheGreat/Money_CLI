@@ -25,9 +25,7 @@ class Program
         SystemVariables.EnsureCreated();
 
         // Then, ensure that there is a database to work with.
-        using (AppDbContext context = new AppDbContext()) {
-            context.Database.EnsureCreated();
-        }
+        AppDbContext.Instance.Database.EnsureCreated();
 
         return await Commands.Root.InvokeAsync(args);
     }
