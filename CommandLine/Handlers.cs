@@ -183,7 +183,7 @@ public class Handlers
                     incomes = MoneyHandler.AllIncome();
 
                 if (incomes.Count == 0) {
-                    Log.Warning("There is no income to list.");
+                    Log.Warning("There are no incomes to list.");
                     return;
                 }
 
