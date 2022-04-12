@@ -136,7 +136,7 @@ public static class SystemVariables
             string json = JsonSerializer.Serialize(_data);
             File.WriteAllText(SystemVariablesFileName, json);
 
-            Log.Information("System variables file has successfully been created.");
+            Log.Information("System variables file was created.");
 
             return true;
         } catch (Exception) {
