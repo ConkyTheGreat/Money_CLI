@@ -117,6 +117,9 @@ public class Handlers
         int Month,
         int Year
     ) {
+        Month = GenericController.ValidateMonth(Month);
+        Year = GenericController.ValidateYear(Year);
+
         if (Expense) {
             if (!FileHandler.Export(ChangeType.Expense, Month, Year))
                 Log.Error("Could not export the expenses.");
@@ -145,11 +148,11 @@ public class Handlers
                 List<Expense> expenses;
 
                 // Only get the expenses that are specified by the user, or all.
-                if (GenericController.MonthIsValid(Month) && GenericController.YearIsValid(Year))
+                if (Month == GenericController.ValidateMonth(Month) && Year == GenericController.ValidateYear(Year))
                     expenses = MoneyHandler.AllMonthlyExpensesById(Month, Year);
-                else if (GenericController.MonthIsValid(Month))
+                else if (Month == GenericController.ValidateMonth(Month))
                     expenses = MoneyHandler.AllExpensesOnMonth(Month);
-                else if (GenericController.YearIsValid(Year))
+                else if (Year == GenericController.ValidateYear(Year))
                     expenses = MoneyHandler.AllExpensesOnYear(Year);
                 else
                     expenses = MoneyHandler.AllExpenses();
@@ -173,11 +176,11 @@ public class Handlers
                 List<Income> incomes;
 
                 // Only get the income that are specified by the user, or all.
-                if (GenericController.MonthIsValid(Month) && GenericController.YearIsValid(Year))
+                if (Month == GenericController.ValidateMonth(Month) && Year == GenericController.ValidateYear(Year))
                     incomes = MoneyHandler.AllMonthlyIncomeById(Month, Year);
-                else if (GenericController.MonthIsValid(Month))
+                else if (Month == GenericController.ValidateMonth(Month))
                     incomes = MoneyHandler.AllIncomeOnMonth(Month);
-                else if (GenericController.YearIsValid(Year))
+                else if (Year == GenericController.ValidateYear(Year))
                     incomes = MoneyHandler.AllIncomeOnYear(Year);
                 else
                     incomes = MoneyHandler.AllIncome();

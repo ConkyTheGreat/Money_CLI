@@ -8,22 +8,10 @@ using System.IO;
 public class GenericController
 {
     /// <summary>
-    /// Returns the date in array format.
+    /// Validates the directory with the correct Separators.
+    /// For more documentation, go to https://docs.microsoft.com/en-us/dotnet/api/system.io.path.directoryseparatorchar
     /// </summary>
-    public static int[] GetDate
-    {
-        get => new int[] {
-            DateTime.Now.Day,
-            DateTime.Now.Month,
-            DateTime.Now.Year
-        };
-    }
-
-    /// <summary>
-    /// Ensures a directory contains correct Separator characters.
-    /// For better understanding, go to https://docs.microsoft.com/en-us/dotnet/api/system.io.path.directoryseparatorchar
-    /// </summary>
-    public static string EnsureDirectory(string directory)
+    public static string ValidateDirectory(string directory)
     {
         string sepChar = Path.DirectorySeparatorChar.ToString();
         string altChar = Path.AltDirectorySeparatorChar.ToString();
@@ -37,21 +25,18 @@ public class GenericController
         return directory.Replace("\\", sepChar);
     }
 
-    #region Month and Year validations
     /// <summary>
-    /// Validates the value of the month from the input.
+    /// Validates the value of the day.
     /// </summary>
-    public static bool MonthIsValid(int month)
-    {
-        return 1 <= month && month <= 12;
-    }
+    public static int ValidateDay (int day) => (1 <= day && day <= 31) ? day : DateTime.Now.Day;
 
     /// <summary>
-    /// Validates the value of the year from the input.
+    /// Validates the value of the month.
     /// </summary>
-    public static bool YearIsValid(int year)
-    {
-        return 1 <= year && year <= DateTime.Now.Year;
-    }
-    #endregion
+    public static int ValidateMonth (int month) => (1 <= month && month <= 12) ? month : DateTime.Now.Month;
+
+    /// <summary>
+    /// Validates the value of the year.
+    /// </summary>
+    public static int ValidateYear (int year) => (1970 <= year && year <= DateTime.Now.Year) ? year : DateTime.Now.Year;
 }

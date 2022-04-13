@@ -1,8 +1,8 @@
 namespace Money_CLI.Controllers;
 
-using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -10,28 +10,17 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Money_CLI.Models;
 using Money_CLI.Models.Enums;
+using Serilog;
 
 public class FileHandler : GenericController
 {
     #region FileName based on month
     /// <summary>
-    /// Returns the string file name for the current date.
-    /// </summary>
-    public static string CurrentFileName
-    {
-        get {
-            string monthFullName = DateTime.Now.ToString("MMMM");
-
-            return $"{GetDate[1].ToString("00")}-{monthFullName}";
-        }
-    }
-
-    /// <summary>
     /// Returns the string file name for the selected month.
     /// </summary>
     public static string FileName(int month)
     {
-        string monthFullName = DateTime.Parse($"01/{month}/1970").ToString("MMMM"); // TODO
+        string monthFullName = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month);
 
         return $"{month.ToString("00")}-{monthFullName}";
     }
@@ -55,18 +44,15 @@ public class FileHandler : GenericController
                     break;
             }
 
-            // Select the year from the input, only if it's valid
-            int chosenYear = YearIsValid(year) ? year : GetDate[2];
-
             // Create the folder, if it doesn't exist
-            string folderPath = EnsureDirectory(@$"{SystemVariables.ExportFolder}{categoryFolder}/{chosenYear}/");
+            string folderPath = ValidateDirectory(@$"{SystemVariables.ExportFolder}{categoryFolder}/{year}/");
             if (!Directory.Exists(folderPath)) {
                 Directory.CreateDirectory(folderPath);
                 Log.Information("Created folder {folderPath}", folderPath);
             }
 
             // Select the month from the input, only if it's valid
-            string fileName = MonthIsValid(month) ? FileName(month) : CurrentFileName;
+            string fileName = FileName(month);
 
             // Create the file, if it doesn't exist
             string fullPath = @$"{folderPath}{fileName}.md";
@@ -93,12 +79,6 @@ public class FileHandler : GenericController
         if (file == null)
             return false;
 
-        if (!MonthIsValid(month))
-            month = GetDate[1];
-
-        if (!YearIsValid(year))
-            year = GetDate[2];
-
         try {
             List<string> template;
             double total = 0;
@@ -112,8 +92,7 @@ public class FileHandler : GenericController
                     // Load the file template
                     template = FileTemplates.FileTemplate(
                             "Income",
-                            // Select the month from the input, only if it's valid
-                            MonthIsValid(month) ? FileName(month) : CurrentFileName,
+                            FileName(month),
                             total
                         ).ToList();
 
@@ -129,8 +108,7 @@ public class FileHandler : GenericController
                     // Load the file template
                     template = FileTemplates.FileTemplate(
                             "Expenses",
-                            // Select the month from the input, only if it's valid
-                            MonthIsValid(month) ? FileName(month) : CurrentFileName,
+                            FileName(month),
                             total
                         ).ToList();
 

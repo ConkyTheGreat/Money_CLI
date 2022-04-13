@@ -46,7 +46,7 @@ public static class SystemVariables
             try {
                 Dictionary<string, string>? _data = SystemVariablesJSON;
 
-                _data["EXPORT_FOLDER"] = GenericController.EnsureDirectory(value);
+                _data["EXPORT_FOLDER"] = GenericController.ValidateDirectory(value);
 
                 string json = JsonSerializer.Serialize(_data);
                 File.WriteAllText(SystemVariablesFileName, json);
@@ -76,7 +76,7 @@ public static class SystemVariables
 
                 string oldValue = _data["DATABASE_FOLDER"];
 
-                _data["DATABASE_FOLDER"] = GenericController.EnsureDirectory(value);
+                _data["DATABASE_FOLDER"] = GenericController.ValidateDirectory(value);
 
                 string json = JsonSerializer.Serialize(_data);
                 File.WriteAllText(SystemVariablesFileName, json);
