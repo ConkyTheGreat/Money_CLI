@@ -10,6 +10,7 @@ public class Income : ChangeBase
         this.Month = cb.Month;
         this.Day = cb.Day;
         this.Comment = cb.Comment;
+        this.Date_in = cb.Date_in;
     }
 
     public Income() : base() { }
