@@ -10,9 +10,10 @@ public static class MoneyHandler
     /// </summary>
     public static double TotalMonthlyExpenses(int month, int year)
     {
-        return AppDbContext.Instance.Expenses
-                                    .Where(i => i.Month == month && i.Year == year)
-                                    .Sum(i => i.Amount);
+        using (AppDbContext context = new AppDbContext())
+            return context.Expenses
+                            .Where(i => i.Month == month && i.Year == year)
+                            .Sum(i => i.Amount);
     }
 
     /// <summary>
@@ -20,9 +21,10 @@ public static class MoneyHandler
     /// </summary>
     public static double TotalMonthlyIncome(int month, int year)
     {
-        return AppDbContext.Instance.Incomes
-                                    .Where(i => i.Month == month && i.Year == year)
-                                    .Sum(i => i.Amount);
+        using (AppDbContext context = new AppDbContext())
+            return context.Incomes
+                            .Where(i => i.Month == month && i.Year == year)
+                            .Sum(i => i.Amount);
     }
     #endregion
 
@@ -32,10 +34,11 @@ public static class MoneyHandler
     /// </summary>
     public static List<Expense> AllMonthlyExpenses(int month, int year)
     {
-        return AppDbContext.Instance.Expenses
-                                    .Where(i => i.Month == month && i.Year == year)
-                                    .OrderBy(i => i.Day)
-                                    .ThenBy(i => i.Title).ToList();
+        using (AppDbContext context = new AppDbContext())
+            return context.Expenses
+                            .Where(i => i.Month == month && i.Year == year)
+                            .OrderBy(i => i.Day)
+                            .ThenBy(i => i.Title).ToList();
     }
 
     /// <summary>
@@ -43,10 +46,11 @@ public static class MoneyHandler
     /// </summary>
     public static List<Expense> AllMonthlyExpensesById(int month, int year)
     {
-        return AppDbContext.Instance.Expenses
-                                    .Where(i => i.Month == month && i.Year == year)
-                                    .OrderBy(i => i.Id)
-                                    .ToList();
+        using (AppDbContext context = new AppDbContext())
+            return context.Expenses
+                            .Where(i => i.Month == month && i.Year == year)
+                            .OrderBy(i => i.Id)
+                            .ToList();
     }
 
     /// <summary>
@@ -54,10 +58,11 @@ public static class MoneyHandler
     /// </summary>
     public static List<Income> AllMonthlyIncome(int month, int year)
     {
-        return AppDbContext.Instance.Incomes
-                                    .Where(i => i.Month == month && i.Year == year)
-                                    .OrderBy(i => i.Day)
-                                    .ThenBy(i => i.Title).ToList();
+        using (AppDbContext context = new AppDbContext())
+            return context.Incomes
+                            .Where(i => i.Month == month && i.Year == year)
+                            .OrderBy(i => i.Day)
+                            .ThenBy(i => i.Title).ToList();
     }
 
     /// <summary>
@@ -65,10 +70,11 @@ public static class MoneyHandler
     /// </summary>
     public static List<Income> AllMonthlyIncomeById(int month, int year)
     {
-        return AppDbContext.Instance.Incomes
-                                    .Where(i => i.Month == month && i.Year == year)
-                                    .OrderBy(i => i.Id)
-                                    .ToList();
+        using (AppDbContext context = new AppDbContext())
+            return context.Incomes
+                            .Where(i => i.Month == month && i.Year == year)
+                            .OrderBy(i => i.Id)
+                            .ToList();
     }
     #endregion
 
@@ -78,10 +84,11 @@ public static class MoneyHandler
     /// </summary>
     public static List<Expense> AllExpensesOnMonth(int month)
     {
-        return AppDbContext.Instance.Expenses
-                                    .Where(i => i.Month == month)
-                                    .OrderBy(i => i.Id)
-                                    .ToList();
+        using (AppDbContext context = new AppDbContext())
+            return context.Expenses
+                            .Where(i => i.Month == month)
+                            .OrderBy(i => i.Id)
+                            .ToList();
     }
 
     /// <summary>
@@ -89,10 +96,11 @@ public static class MoneyHandler
     /// </summary>
     public static List<Income> AllIncomeOnMonth(int month)
     {
-        return AppDbContext.Instance.Incomes
-                                    .Where(i => i.Month == month)
-                                    .OrderBy(i => i.Id)
-                                    .ToList();
+        using (AppDbContext context = new AppDbContext())
+            return context.Incomes
+                            .Where(i => i.Month == month)
+                            .OrderBy(i => i.Id)
+                            .ToList();
     }
     #endregion
 
@@ -102,10 +110,11 @@ public static class MoneyHandler
     /// </summary>
     public static List<Expense> AllExpensesOnYear(int year)
     {
-        return AppDbContext.Instance.Expenses
-                                    .Where(i => i.Year == year)
-                                    .OrderBy(i => i.Id)
-                                    .ToList();
+        using (AppDbContext context = new AppDbContext())
+            return context.Expenses
+                            .Where(i => i.Year == year)
+                            .OrderBy(i => i.Id)
+                            .ToList();
     }
 
     /// <summary>
@@ -113,10 +122,11 @@ public static class MoneyHandler
     /// </summary>
     public static List<Income> AllIncomeOnYear(int year)
     {
-        return AppDbContext.Instance.Incomes
-                                    .Where(i => i.Year == year)
-                                    .OrderBy(i => i.Id)
-                                    .ToList();
+        using (AppDbContext context = new AppDbContext())
+            return context.Incomes
+                            .Where(i => i.Year == year)
+                            .OrderBy(i => i.Id)
+                            .ToList();
     }
     #endregion
 
@@ -126,8 +136,10 @@ public static class MoneyHandler
     /// </summary>
     public static void AddExpense(Expense expense)
     {
-        AppDbContext.Instance.Expenses.Add(expense);
-        AppDbContext.Instance.SaveChanges();
+        using (AppDbContext context = new AppDbContext()) {
+            context.Expenses.Add(expense);
+            context.SaveChanges();
+        }
     }
 
     /// <summary>
@@ -135,8 +147,10 @@ public static class MoneyHandler
     /// </summary>
     public static void AddIncome(Income income)
     {
-        AppDbContext.Instance.Incomes.Add(income);
-        AppDbContext.Instance.SaveChanges();
+        using (AppDbContext context = new AppDbContext()) {
+            context.Incomes.Add(income);
+            context.SaveChanges();
+        }
     }
     #endregion
 
@@ -146,9 +160,10 @@ public static class MoneyHandler
     /// </summary>
     public static List<Expense> AllExpenses()
     {
-        return AppDbContext.Instance.Expenses
-                                    .OrderBy(i => i.Id)
-                                    .ToList();
+        using (AppDbContext context = new AppDbContext())
+        return context.Expenses
+                        .OrderBy(i => i.Id)
+                        .ToList();
     }
 
     /// <summary>
@@ -156,9 +171,10 @@ public static class MoneyHandler
     /// </summary>
     public static List<Income> AllIncome()
     {
-        return AppDbContext.Instance.Incomes
-                                    .OrderBy(i => i.Id)
-                                    .ToList();
+        using (AppDbContext context = new AppDbContext())
+        return context.Incomes
+                        .OrderBy(i => i.Id)
+                        .ToList();
     }
     #endregion
 
@@ -168,10 +184,11 @@ public static class MoneyHandler
     /// </summary>
     public static void RemoveExpense(int Id)
     {
-        Expense expense = AppDbContext.Instance.Expenses.Single(i => i.Id == Id);
-
-        AppDbContext.Instance.Expenses.Remove(expense);
-        AppDbContext.Instance.SaveChanges();
+        using (AppDbContext context = new AppDbContext()) {
+            Expense expense = context.Expenses.Single(i => i.Id == Id);
+            context.Expenses.Remove(expense);
+            context.SaveChanges();
+        }
     }
 
     /// <summary>
@@ -179,10 +196,11 @@ public static class MoneyHandler
     /// </summary>
     public static void RemoveIncome(int Id)
     {
-        Income income = AppDbContext.Instance.Incomes.Single(i => i.Id == Id);
-
-        AppDbContext.Instance.Incomes.Remove(income);
-        AppDbContext.Instance.SaveChanges();
+        using (AppDbContext context = new AppDbContext()) {
+            Income income = context.Incomes.Single(i => i.Id == Id);
+            context.Incomes.Remove(income);
+            context.SaveChanges();
+        }
     }
     #endregion
 }
